@@ -25,44 +25,31 @@ namespace ItemManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(Food item)
+        public async Task<IActionResult> Index(LacosteFile item)
         {
-            //Either use a viewmodel or remove photoURL. URL will
-            //be generated programmatically
-            ModelState.Remove(nameof(Food.PhotoUrl));
-            item.Id = 0; //SQL Server will generate a new ID
 
             if (ModelState.IsValid)
             {
-                IFormFile photo = item.Photo;
+                IFormFile file_for_processing = item.File;
                 //Check file extension is a photo
                 string extension =
-                       Path.GetExtension(photo.FileName);
-                if (extension == ".png" || extension == ".jpg")
+                       Path.GetExtension(file_for_processing.FileName);
+
+                if (file_for_processing.Length > 0) //ensure the file is not empty
                 {
-                    //TODO: Use ImageSharp to resize uploaded photo
-                    //https://www.hanselman.com/blog/HowDoYouUseSystemDrawingInNETCore.aspx
+                    string filePath = Path.Combine(_env.ContentRootPath, "Lacoste"
+                                                , file_for_processing.FileName);
 
-                    //generate unique name to retrieve later
-                    string newFileName = Guid.NewGuid().ToString();
-
-                    //store photo on file system and reference in DB
-                    if (photo.Length > 0) //ensure the file is not empty
+                    //write file to file system
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create))
                     {
-                        string filePath = Path.Combine(_env.WebRootPath, "images"
-                                                    , newFileName + extension);
-                        //save location to database (in URL format)
-                        item.PhotoUrl = "images/" + newFileName + extension;
-                        //write file to file system
-                        using (FileStream fs = new FileStream(filePath, FileMode.Create))
-                        {
-                            await photo.CopyToAsync(fs);
-                        }
-                        return RedirectToAction("Index", "Home");
+                        await file_for_processing.CopyToAsync(fs);
                     }
-
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
+
+                return View();
+
 
             }
 
