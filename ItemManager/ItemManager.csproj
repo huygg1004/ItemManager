@@ -15,4 +15,29 @@
     <Folder Include="Lacoste\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+    <PackageReference Include="NPOI" Version="2.3.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DataSolutions.ApplicationFramework">
+      <HintPath>..\..\DataSolutions.Framework\Packages\DataSolutions.ApplicationFramework.1.5.0\lib\net35\DataSolutions.ApplicationFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="DataSolutions.Commons">
+      <HintPath>..\..\DataSolutions.Framework\Packages\DataSolutions.Commons.1.9.1\lib\net35\DataSolutions.Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="DataSolutions.DataModels">
+      <HintPath>..\..\DataSolutions.Framework\Packages\DataSolutions.DataModels.1.4.5\DataSolutions.DataModels.dll</HintPath>
+    </Reference>
+    <Reference Include="DataSolutions.DataModelTools">
+      <HintPath>..\..\DataSolutions.Framework\Packages\DataSolutions.DataModelTools.1.4.5\DataSolutions.DataModelTools.dll</HintPath>
+    </Reference>
+    <Reference Include="DataSolutions.Logging">
+      <HintPath>..\..\DataSolutions.Framework\Packages\DataSolutions.Logging.1.9.1\lib\net35\DataSolutions.Logging.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using DataSolutions.Logging.Logger;
 
 namespace ItemManager.Controllers
 {
@@ -37,7 +38,7 @@ namespace ItemManager.Controllers
 
                 if (file_for_processing.Length > 0) //ensure the file is not empty
                 {
-                    string filePath = Path.Combine(_env.ContentRootPath, "Lacoste"
+                    string filePath = Path.Combine(_env.ContentRootPath, "TEST", "ftp", "Upload"
                                                 , file_for_processing.FileName);
 
                     //write file to file system
@@ -45,15 +46,26 @@ namespace ItemManager.Controllers
                     {
                         await file_for_processing.CopyToAsync(fs);
                     }
-                    return RedirectToAction("Index", "Home");
+
+                    //Combining
+                    var payload_LACOSTEPostProcess = new LACOSTEPostprocessCycle(_env);
+                    try
+                    {
+                        payload_LACOSTEPostProcess.DoWork();
+                        TempData["MsgChangeStatus"] += "Records have been successfully inserted into DB";
+                        return View("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["MsgChangeStatus"] += ex.ToString();
+                        return View("Index");
+                        throw;
+                    }
                 }
-
                 return View();
-
-
             }
-
             return View();
         }
+
     }
 }
